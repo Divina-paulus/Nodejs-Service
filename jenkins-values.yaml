@@ -1,0 +1,45 @@
+# Jenkins configuration values
+jenkins:
+  # Kubernetes namespace where Jenkins will be deployed
+  namespace: jenkins
+
+  # Jenkins master configuration
+  master:
+    # Number of replicas for Jenkins master
+    replicas: 1
+
+    # Jenkins master container image
+    image: jenkins/jenkins:lts
+
+    # Jenkins master container environment variables
+    env:
+      - name: JAVA_OPTS
+        value: "-Djenkins.install.runSetupWizard=false"
+
+    # Jenkins master container volume mounts
+    volumeMounts:
+      - name: jenkins-home
+        mountPath: /var/jenkins_home
+
+  # Jenkins agent configuration
+  agent:
+    # Jenkins agent container image
+    image: jenkins/jnlp-slave
+
+    # Jenkins agent container volume mounts
+    volumeMounts:
+      - name: jenkins-home
+        mountPath: /var/jenkins_home
+
+  # Jenkins persistence configuration
+  persistence:
+    # Jenkins home directory storage class
+    storageClass: standard
+
+    # Jenkins home directory size
+    size: 10Gi
+
+# Kubernetes RBAC configuration values
+rbac:
+  create: true
+  
